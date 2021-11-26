@@ -8,10 +8,12 @@ function TodoInsert() {
   const dispatch = useDispatch();
 
   const onInsert = (text: string) => dispatch(insert(text));
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+  const onChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(onChangeInput(e.target.value));
   }
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+  const onSubmitHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     onInsert(input);
     onChangeInput('');
@@ -19,8 +21,8 @@ function TodoInsert() {
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <input type="text" value={input} onChange={onChange}/>
+      <form onSubmit={onSubmitHandler}>
+        <input type="text" value={input} onChange={onChangeHandler}/>
         <button type="submit">등록</button>
       </form>
     </div>
