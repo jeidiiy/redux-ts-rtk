@@ -1,4 +1,4 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface Todo {
   id: number,
@@ -6,25 +6,25 @@ interface Todo {
   checked: boolean
 }
 
-// 액션
-const INSERT = 'todos/INSERT';
-const REMOVE = 'todos/REMOVE';
-const TOGGLE = 'todos/TOGGLE';
-const CHANGE = 'todos/CHANGE';
-
-// 액션 생성 함수
-export const insert = createAction(INSERT, (text: string) => {
-  return {
-    payload: {
-      id: curId++,
-      text,
-      checked: false
-    } as Todo
-  }
-});
-export const remove = createAction<number>(REMOVE);
-export const toggle = createAction<number>(TOGGLE);
-export const onChangeInput = createAction<string>(CHANGE);
+// // 액션
+// const INSERT = 'todos/INSERT';
+// const REMOVE = 'todos/REMOVE';
+// const TOGGLE = 'todos/TOGGLE';
+// const CHANGE = 'todos/CHANGE';
+//
+// // 액션 생성 함수
+// export const insert = createAction(INSERT, (text: string) => {
+//   return {
+//     payload: {
+//       id: curId++,
+//       text,
+//       checked: false
+//     } as Todo
+//   }
+// });
+// export const remove = createAction<number>(REMOVE);
+// export const toggle = createAction<number>(TOGGLE);
+// export const onChangeInput = createAction<string>(CHANGE);
 
 // 초기값
 const initialState = {
@@ -38,21 +38,44 @@ const initialState = {
 
 let curId = 4;
 
-// 리듀서
-const todos = createReducer(initialState, (builder =>
-    builder
-      .addCase(insert, (state, action) => {
-        state.todos.push(action.payload);
-      })
-      .addCase(remove, (state, action) => {
-        state.todos.splice(state.todos.findIndex(todo => todo.id === action.payload), 1)
-      })
-      .addCase(toggle, (state, action) => {
-        state.todos.forEach(todo => todo.id === action.payload ? todo.checked = !todo.checked : todo)
-      })
-      .addCase(onChangeInput, (state, action) => {
-        state.input = action.payload;
-      })
-))
+// // 리듀서
+// const todos = createReducer(initialState, (builder =>
+//     builder
+//       .addCase(insert, (state, action) => {
+//         state.todos.push(action.payload);
+//       })
+//       .addCase(remove, (state, action) => {
+//         state.todos.splice(state.todos.findIndex(todo => todo.id === action.payload), 1)
+//       })
+//       .addCase(toggle, (state, action) => {
+//         state.todos.forEach(todo => todo.id === action.payload ? todo.checked = !todo.checked : todo)
+//       })
+//       .addCase(onChangeInput, (state, action) => {
+//         state.input = action.payload;
+//       })
+// ))
 
-export default todos;
+// export default todos;
+
+// createSlice 활용
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+    insert(state, { payload: text }) {
+      state.todos.push({ id: curId++, text, checked: false } as Todo);
+    },
+    remove(state, { payload: targetId }) {
+      state.todos.splice(state.todos.findIndex(todo => todo.id === targetId))
+    },
+    toggle(state, { payload: targetId }) {
+      state.todos.forEach(todo => todo.id === targetId ? todo.checked = !todo.checked : todo)
+    },
+    onChangeInput(state, { payload: input }) {
+      state.input = input;
+    }
+  }
+})
+
+export const { insert, remove, toggle, onChangeInput } = todosSlice.actions;
+export default todosSlice.reducer;

@@ -8,5 +8,3 @@ export const rootReducer = combineReducers({
 })
 
 export type RootState = ReturnType<typeof rootReducer>
-export type CounterState = ReturnType<typeof counter>
-export type TodosState = ReturnType<typeof todos>

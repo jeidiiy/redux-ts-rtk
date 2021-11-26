@@ -1,17 +1,17 @@
 import { insert, onChangeInput } from '../modules/todos';
 import { useDispatch, useSelector } from "react-redux";
-import { TodosState } from "../modules";
-import React from "react";
+import { RootState } from "../modules";
+import React, { ChangeEvent, FormEvent } from "react";
 
 function TodoInsert() {
-  const input = useSelector((todos: TodosState) => todos.input);
+  const input = useSelector(({ todos }: RootState) => todos.input);
   const dispatch = useDispatch();
 
   const onInsert = (text: string) => dispatch(insert(text));
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(onChangeInput(e.target.value));
   }
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onInsert(input);
     onChangeInput('');
